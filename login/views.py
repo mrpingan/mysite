@@ -12,7 +12,7 @@ def login(request):
 
 def register(request):
     pass
-    return render(request,'login/register')
+    return render(request,'login/register.html')
 
 def logout(request):
     pass
