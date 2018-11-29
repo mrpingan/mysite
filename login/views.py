@@ -1,12 +1,13 @@
 from django.shortcuts import render
 from django.shortcuts import redirect
+from django.conf import settings
+from django.utils import timezone
 # Create your views here.
 from login import models
 from login import forms
 from utils import common
 import datetime
-import pytz
-from django.conf import settings
+
 
 
 def index(request):
@@ -24,7 +25,7 @@ def login(request):
             password = login_form.cleaned_data['password']
             try:
                 user = models.User.objects.get(name=username)
-                if user.has_confirmed:
+                if not user.has_confirmed:
                     message = "该用户还未通过邮件确认！"
                     return render(request,'login/login.html',locals())
                 if user.password == common.hash_code(password):
@@ -101,8 +102,9 @@ def user_confirm(request):
         return render(request,'login/confirm.html',locals())
 
     c_time = confirm.c_time
-    now = datetime.datetime.now()
-    if now > c_time.replace(tzinfo=pytz.timezone('UTC')) + datetime.timedelta(days=settings.CONFIRM_DAYS):
+    # now = datetime.datetime.now()
+    now = timezone.now()
+    if now > c_time + datetime.timedelta(days=settings.CONFIRM_DAYS):
         confirm.user.delete()
         message = '您的邮件已经过期！请重新注册'
         return render(request,'login/register.html',locals())
