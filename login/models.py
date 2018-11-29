@@ -5,9 +5,9 @@ from django.db import models
 class User(models.Model):
 
     gender = (
-        ('male','男'),
-        ('female','女'),
-        ('unknow','未知'),
+        ('M','男'),
+        ('F','女'),
+        ('N','未知'),
     )
 
     name = models.CharField(max_length=128,unique=True)
@@ -15,6 +15,7 @@ class User(models.Model):
     email = models.EmailField(unique=True)
     sex = models.CharField(max_length=32,choices=gender,default="未知")
     create_at = models.DateTimeField(auto_now_add=True)
+    has_confirmed = models.BooleanField(default=False)
 
 
     class Meta:
@@ -26,3 +27,17 @@ class User(models.Model):
     def __str__(self):
         return self.name
 
+
+class ConfirmString(models.Model):
+    code = models.CharField(max_length=256)
+    user = models.OneToOneField('User')
+    c_time = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        db_table = "tb_confirm"
+        ordering = ["-c_time"]
+        verbose_name = "确认码"
+        verbose_name_plural = "确认码"
+
+    def __str__(self):
+        return self.user.name + ":" + self.code

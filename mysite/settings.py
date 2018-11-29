@@ -101,11 +101,20 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
+# Email
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST = 'smtp.ybm100.com'
+EMAIL_PORT = 25
+EMAIL_HOST_USER = 'qq.ping@ybm100.com'
+EMAIL_HOST_PASSWORD = 'p921194882qq*'
+
+# Email expire time
+CONFIRM_DAYS = 7
 
 # Internationalization
-# https://docs.djangoproject.com/en/1.11/topics/i18n/
+#
 
-LANGUAGE_CODE = 'en-us'
+LANGUAGE_CODE = 'zh-hans'
 
 TIME_ZONE = 'UTC'
 
